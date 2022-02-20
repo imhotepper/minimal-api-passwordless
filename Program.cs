@@ -2,6 +2,7 @@
 //https://www.freecodecamp.org/news/how-to-go-passwordless-with-dotnet-identity/
 //https://www.scottbrady91.com/aspnet-identity/implementing-mediums-passwordless-authentication-using-aspnet-core-identity
 
+using System.Diagnostics;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -85,9 +86,24 @@ builder.Services.AddDbContext<AppDb>(options =>
     ServiceLifetime.Singleton);
 
 builder.Services.AddScoped<SendGridService>()
-    .AddScoped<TokenService>();
+    .AddScoped<TokenService>()
+    .AddHostedService<SimpleJob>();
 
 var app = builder.Build();
+
+
+app.Use(async (context, next) =>
+{
+    // Do work that doesn't write to the Response.
+    await next.Invoke();
+    // Do logging or other work that doesn't write to the Response.
+    var proc = Process.GetCurrentProcess();
+    var mem = proc.WorkingSet64;
+    var cpu = proc.TotalProcessorTime;
+    Console.WriteLine("--------------------------------");
+    Console.WriteLine("Current process used working set {0:n3} MB of working set and CPU {1:n} msec", mem / (1024.0 * 1000), cpu.TotalMilliseconds);
+    Console.WriteLine("--------------------------------");
+});
 
 //swagger initialization
 app.UseSwagger();
@@ -214,5 +230,26 @@ public class TokenService
             signingCredentials: credentials);
         var token = new JwtSecurityTokenHandler().WriteToken(tokenClaims);
         return token;
+    }
+}
+
+
+
+class SimpleJob : IHostedService
+{
+    private Timer _timer;
+    public Task StartAsync(CancellationToken cancellationToken)
+    {
+        _timer = new Timer((state) =>
+        {
+            Console.WriteLine("Job Executed "+ DateTime.Now);
+        }, null, TimeSpan.Zero, TimeSpan.FromSeconds(5));
+        return Task.CompletedTask;
+    }
+
+    public Task StopAsync(CancellationToken cancellationToken)
+    {
+        _timer?.Change(Timeout.Infinite, 0);
+        return Task.CompletedTask;
     }
 }
