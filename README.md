@@ -1,4 +1,4 @@
-# Minimal API  passwordless a
+# Minimal API  passwordless
 
 Passwordless authentication and authorization with .Net 6 Minimal Api + Microsoft IdentityModel JWT + In Memory EF database + SendGrid
 
