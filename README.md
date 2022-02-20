@@ -1,8 +1,8 @@
-# Minimal API  passwordless authentication/Authorization
+# Minimal API  passwordless a
 
-Passwordless authentication with .Net 6 Minimal Api + Microsoft IdentityModel JWT + In Memory EF database + SendGrid
+Passwordless authentication and authorization with .Net 6 Minimal Api + Microsoft IdentityModel JWT + In Memory EF database + SendGrid
 
-## Boiler plate for passwordless authentication
+## Boilerplate for passwordless authentication
 
 The code in the repo contains all the endpoints needed to create passwordless authentication/authorization for any SPA.
 
