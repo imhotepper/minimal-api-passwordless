@@ -19,7 +19,7 @@ The missing SendGrid key must be created at SendGrid side and added to the setti
 7. Use the api Swagger's `Authorize` button and add the token as: `Bearer [YOUR_TOKEN_HERE]`
 8. Test the `/api/dashboard` from swagger and if the bearer is valid you should see the message returned `"[YOUR_EMAIL_HERE] is Authenticated! "`
 
-**The api can be used for any SPA that needs passwordless authentication with a backend written with .NET 6 Minimal API.**
+**The api can be used, as a starting point, for any SPA that needs passwordless authentication on a backend written with .NET 6 Minimal API.**
 
 <br>
 <br>
