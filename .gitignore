@@ -3,3 +3,4 @@ obj
 .idea
 .vs
 appsettings.Development.json
+.DS_Store
