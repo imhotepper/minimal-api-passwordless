@@ -60,7 +60,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         {
             ValidateIssuer = true,
             ValidateAudience = true,
-            ValidateLifetime = false,
+            ValidateLifetime = true,
             ValidateIssuerSigningKey = true,
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidAudience = builder.Configuration["Jwt:Audience"],
@@ -98,7 +98,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 
-app.MapGet("/", () => "UnAuthenticated Hello World !");
+app.MapGet("/", () => "unAuthenticated Hello World !");
 
 app.MapGet("/api/{email}",
     async (string email, UserManager<IdentityUser> _userManager, HttpRequest req, SendGridService sendGridService) =>
@@ -179,17 +179,18 @@ public class SendGridService
 
     public async Task SendEmail(string email, string url)
     {
-        var apiKey = Environment.GetEnvironmentVariable("SENDGRID_API_KEY") ?? _configuration["SENDGRID_API_KEY"];
+//        var apiKey = Environment.GetEnvironmentVariable("SENDGRID_API_KEY") ?? _configuration["SENDGRID_API_KEY"];
         var fromEmail = Environment.GetEnvironmentVariable("FROM_EMAIL") ?? _configuration["FROM_EMAIL"];
-        var client = new SendGridClient(apiKey);
+//        var client = new SendGridClient(apiKey);
         var from = new EmailAddress(fromEmail, "Passwordless login");
         var subject = "Passwordless login link";
         var to = new EmailAddress(email);
         var htmlContent = $"<h2>Click the link below to login to passwwordless</h2><br/><h3> <a href=" + url +
                           "> Login</a></h3>";
-        var msg = MailHelper.CreateSingleEmail(from, to, subject, "", htmlContent);
-        var response = await client.SendEmailAsync(msg);
-        Console.WriteLine("Sendgrid response:" + JsonConvert.SerializeObject(response));
+        Console.WriteLine(htmlContent);
+//        var msg = MailHelper.CreateSingleEmail(from, to, subject, "", htmlContent);
+//        var response = await client.SendEmailAsync(msg);
+//        Console.WriteLine("Sendgrid response:" + JsonConvert.SerializeObject(response));
     }
 }
 
